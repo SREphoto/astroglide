@@ -1,0 +1,27 @@
+{
+  "hudBusy": {
+    "jetpackBtn": false,
+    "rewindBtn": false,
+    "starGaze": false,
+    "pause": true,
+    "mode": "PLAYING",
+    "moons": 8,
+    "secrets": 1,
+    "zoom": 1
+  },
+  "exploring": true,
+  "zoom": 2.314331912469575,
+  "walk": {
+    "ok": true,
+    "dD": -0.720090000000001,
+    "dA": 0.6750000000000005,
+    "facing": -0.9993094063046171,
+    "exploring": true
+  },
+  "pauseHasGestures": true,
+  "pauseHasCharges": true,
+  "mag": {
+    "pct": 0,
+    "n": 400760
+  }
+}

@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import "./game/index.css";
+
+@theme {
+  --color-bg: #020617;
+  --color-surface: #0f172a;
+  --color-fg: #e2e8f0;
+  --color-muted: #94a3b8;
+  --color-primary: #38bdf8;
+  --color-accent: #fbbf24;
+  --color-border: #1e293b;
+  --radius: 0.75rem;
+  --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    background: #020617;
+    color: #e2e8f0;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}

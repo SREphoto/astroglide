@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Cosmic Explorer",
+      "hasCanvas": true,
+      "bodyTextLen": 1098,
+      "bodyTextHash": "7d14244baa72f078c1043263ba967c47ae9fef46e37aa46e52986c3ad6dc32bd",
+      "bodyTextPrefix": "100 10 Login Medals (0) Guide COSMIC EXPLORER COSMIC JUMPER Litt",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Cosmic Explorer",
+      "hasCanvas": true,
+      "bodyTextLen": 1092,
+      "bodyTextHash": "c4a41cd4bc1145758b96485a8597534b3db573ba1155d6ca64e539834b5549e9",
+      "bodyTextPrefix": "100 10 Medals (0) Guide COSMIC EXPLORER COSMIC JUMPER Little Ast",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
