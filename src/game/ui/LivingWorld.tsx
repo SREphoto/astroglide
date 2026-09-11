@@ -31,7 +31,8 @@ type SceneId =
   | 'bank'
   | 'warehouse'
   | 'trophy'
-  | 'command';
+  | 'command'
+  | 'tavern';
 
 export type WorldAction =
   | 'launch'
@@ -78,95 +79,149 @@ interface SceneDef {
   actions: { id: WorldAction; label: string; icon: React.ReactNode; primary?: boolean }[];
 }
 
-const NPCS: Record<string, { name: string; role: string; portrait: string; lines: string[] }> = {
-  juno: {
-    name: 'Elder Juno',
-    role: 'Town Guide',
-    portrait: '/town/npc-juno.png',
+const NPCS: Record<
+  string,
+  { name: string; role: string; portrait: string; sprite?: string; lines: string[]; action?: WorldAction; actionLabel?: string }
+> = {
+  steward: {
+    name: 'Captain Rhea',
+    role: 'Hangar Steward',
+    portrait: '/town/npc-steward.png',
+    sprite: '/town/npc-steward-work.png',
     lines: [
-      'Welcome home. This little rock is ours to grow.',
-      'Every voyage you fly brings something back to Hearth Row.',
-      'The townsfolk talk of nothing but your last jump. Make it a good story.',
+      'Pads are clear and the rack is stocked — pick a suit and jump when ready.',
+      'I keep every launch logged. Make this one worth the ink.',
+      'Wardrobe first if you want to look sharp out there.',
     ],
+    action: 'wardrobe',
+    actionLabel: 'Hangar Rack',
   },
-  nova: {
-    name: 'Nova',
-    role: 'Mechanic',
-    portrait: '/town/npc-nova.png',
+  engineer: {
+    name: 'Basalt',
+    role: 'Workshop Engineer',
+    portrait: '/town/npc-engineer.png',
+    sprite: '/town/npc-engineer-work.png',
     lines: [
-      'Ship is fueled and grumpy about it. Ready when you are.',
-      'I tuned the thrusters while you were out. She purrs now.',
-      'You jump, I fix. That is the deal.',
+      'Stone hands, fine tools. Your thrusters will sing after I touch them.',
+      'Bring me scrap glow and I will forge upgrades that last.',
+      'Goggles up. We work.',
     ],
+    action: 'upgrades',
+    actionLabel: 'Train & Upgrade',
   },
-  bargo: {
-    name: 'Bargo',
-    role: 'Shopkeeper',
-    portrait: '/town/npc-bargo.png',
+  courier: {
+    name: 'Kite',
+    role: 'Quest Courier',
+    portrait: '/town/npc-courier.png',
+    sprite: '/town/npc-courier-work.png',
     lines: [
-      'Fresh stock fell off a wormhole this morning. Totally legal.',
-      'Buy something pretty — the planet deserves decorations.',
-      'Prices? Fair. My margins? Also fair.',
+      'Fresh scrolls, still warm from the wormhole!',
+      'Pick a mission and I will pin it to your log.',
+      'If it glows cyan, it is important. Probably.',
     ],
+    action: 'quests',
+    actionLabel: 'Mission Log',
   },
-  seren: {
-    name: 'Seren',
-    role: 'Gardener',
-    portrait: '/town/npc-seren.png',
+  mapkeeper: {
+    name: 'Archivist Vesper',
+    role: 'Map Keeper',
+    portrait: '/town/npc-mapkeeper.png',
+    sprite: '/town/npc-mapkeeper-work.png',
+    lines: [
+      'The constellations remember every route you have flown.',
+      'Align the armillary and the sector map will open.',
+      'Stars do not lie. Charts sometimes do — I correct them.',
+    ],
+    action: 'map',
+    actionLabel: 'Sector Map',
+  },
+  trader: {
+    name: 'Foxglove',
+    role: 'Space Trader',
+    portrait: '/town/npc-trader.png',
+    sprite: '/town/npc-trader-work.png',
+    lines: [
+      'Crates just landed — totally legitimate cosmic surplus.',
+      'Buy pretty things. Your planet deserves decorations.',
+      'My margins are fair. My smirk is free.',
+    ],
+    action: 'shop',
+    actionLabel: 'Browse Wares',
+  },
+  curator: {
+    name: 'Commander Indira',
+    role: 'Medal Curator',
+    portrait: '/town/npc-curator.png',
+    sprite: '/town/npc-curator-work.png',
+    lines: [
+      'Every medal is a jump that mattered.',
+      'The Hall has room for more of your glory.',
+      'Polish your pride — then earn another.',
+    ],
+    action: 'medals',
+    actionLabel: 'Medal Chest',
+  },
+  gardener: {
+    name: 'Bloom',
+    role: 'Starlight Gardener',
+    portrait: '/town/npc-gardener.png',
+    sprite: '/town/npc-gardener-work.png',
     lines: [
       'The star-daisies bloom brighter after a good voyage.',
       'Harvest when the glow is ripe — never sooner.',
       'Green hands, green planet. That is the whole philosophy.',
     ],
+    action: 'garden',
+    actionLabel: 'Tend the Garden',
   },
-  tansy: {
-    name: 'Old Tansy',
-    role: 'Townsfolk',
-    portrait: '/town/npc-tansy.png',
+  barkeeper: {
+    name: 'Marisol',
+    role: 'Tavern Keep',
+    portrait: '/town/npc-barkeeper.png',
+    sprite: '/town/npc-barkeeper-work.png',
     lines: [
-      'Back in my day we orbited uphill both ways.',
-      'The dusk on this planet never gets old, dear.',
-      'Bring the town something shiny, hmm?',
+      'Welcome to the Starwell — drinks, gossip, and fair fights.',
+      'Want a 2-player match? I will open a table for you.',
+      'House rule: no thruster burns indoors.',
     ],
+    action: 'arena',
+    actionLabel: 'Create 2P Game',
   },
-  pip: {
-    name: 'Pip',
-    role: 'Townsfolk',
-    portrait: '/town/npc-pip.png',
+  challenger: {
+    name: 'Mothwing',
+    role: 'Arena Challenger',
+    portrait: '/town/npc-challenger.png',
     lines: [
-      'When I grow up I want to jump planets like you!',
-      'I saw a comet yesterday. It waved. Probably.',
+      'Bet you cannot beat my perfect-chain record.',
+      '1v1. No excuses. Wings optional.',
+      'If you win, the whole tavern hears about it.',
     ],
+    action: 'arena',
+    actionLabel: 'Challenge 1v1',
   },
-  vega: {
-    name: 'Coach Vega',
-    role: 'Trainer',
-    portrait: '/town/npc-vega.png',
-    lines: ['One more orbit! Then one more after that!', 'Upgrades are just push-ups for your ship.'],
+  storyteller: {
+    name: 'Old Cassian',
+    role: 'Retired Navigator',
+    portrait: '/town/npc-storyteller.png',
+    lines: [
+      'Pull up a stool. I have routes older than this dome.',
+      'The cyan eye sees more than charts — it sees stories.',
+      'Ask the Mission Log if you want work. Ask me if you want why.',
+    ],
+    action: 'quests',
+    actionLabel: 'Hear a Lead',
   },
-  quill: {
-    name: 'Mr. Quill',
-    role: 'Bank Teller',
-    portrait: '/town/npc-quill.png',
-    lines: ['Deposits are eternal. Withdrawals require paperwork.', 'Your vault is precisely as tidy as I am.'],
-  },
-  mira: {
-    name: 'Mira',
-    role: 'Warehouse Keeper',
-    portrait: '/town/npc-mira.png',
-    lines: ['Aisle one: timber. Aisle two: quartz. Aisle three: my patience.', 'Bring me supplies. I will make them count.'],
-  },
-  laurel: {
-    name: 'Doc Laurel',
-    role: 'Curator',
-    portrait: '/town/npc-laurel.png',
-    lines: ['Every medal tells a jump. Every jump tells a story.', 'The Hall has room for more of your glory.'],
-  },
-  orion: {
-    name: 'Commander Orion',
-    role: 'Planetary Officer',
-    portrait: '/town/npc-orion.png',
-    lines: ['The Command Center tracks every breath of this world.', 'A wise commander reviews the report between voyages.'],
+  matchmaker: {
+    name: 'Puddle',
+    role: 'Matchmaker',
+    portrait: '/town/npc-matchmaker.png',
+    lines: [
+      'Looking for a co-pilot? I know who is online!',
+      'Wave if you want a room code. I am excellent at introductions.',
+      'Jelly memory is short, but rivalry is forever.',
+    ],
+    action: 'arena',
+    actionLabel: 'Find a Partner',
   },
 };
 
@@ -180,12 +235,12 @@ const SCENES: Record<SceneId, SceneDef> = {
     ambience: 'Lanterns flicker along Hearth Row as dusk settles over your world.',
     hotspots: [
       { id: 'greenhouse', label: 'Greenhouse', x: 0.13, kind: 'door', to: 'greenhouse' },
-      { id: 'shop', label: 'Bargo’s Store', x: 0.24, kind: 'door', to: 'shop' },
+      { id: 'shop', label: 'Foxglove’s Store', x: 0.24, kind: 'door', to: 'shop' },
       { id: 'bank', label: 'Stellar Bank', x: 0.34, kind: 'door', to: 'bank' },
       { id: 'freight', label: 'Freight Depot', x: 0.46, kind: 'door', to: 'warehouse' },
       { id: 'gym', label: 'Gravity Gym', x: 0.56, kind: 'door', to: 'gym' },
-      { id: 'tansy', label: 'Old Tansy', x: 0.64, kind: 'npc', npcId: 'tansy' },
-      { id: 'juno', label: 'Elder Juno', x: 0.52, kind: 'npc', npcId: 'juno' },
+      { id: 'tavern', label: 'Starwell Tavern', x: 0.64, kind: 'door', to: 'tavern' },
+      { id: 'courier', label: 'Kite', x: 0.7, kind: 'npc', npcId: 'courier' },
       { id: 'hangar', label: 'Launch Hangar', x: 0.82, kind: 'door', to: 'hangar' },
       { id: 'trophy', label: 'Hall of Honors', x: 0.72, kind: 'door', to: 'trophy' },
       { id: 'command', label: 'Command', x: 0.93, kind: 'door', to: 'command' },
@@ -199,7 +254,7 @@ const SCENES: Record<SceneId, SceneDef> = {
     artW: 1376,
     artH: 768,
     ambience: 'Fuel lines hum. Your rocket waits under the work lights.',
-    hotspots: [{ id: 'nova', label: 'Nova', x: 0.62, kind: 'npc', npcId: 'nova' }],
+    hotspots: [{ id: 'steward', label: 'Captain Rhea', x: 0.62, kind: 'npc', npcId: 'steward' }],
     actions: [
       { id: 'launch', label: 'Launch Voyage', icon: <Rocket className="w-4 h-4" />, primary: true },
       { id: 'arena', label: '1v1 Arena', icon: <Swords className="w-4 h-4" /> },
@@ -214,17 +269,17 @@ const SCENES: Record<SceneId, SceneDef> = {
     artW: 1376,
     artH: 768,
     ambience: 'Warm light filters through the glass dome. Everything smells of growth.',
-    hotspots: [{ id: 'seren', label: 'Seren', x: 0.55, kind: 'npc', npcId: 'seren' }],
+    hotspots: [{ id: 'gardener', label: 'Bloom', x: 0.55, kind: 'npc', npcId: 'gardener' }],
     actions: [{ id: 'garden', label: 'Tend the Garden', icon: <Sprout className="w-4 h-4" />, primary: true }],
   },
   shop: {
     id: 'shop',
-    name: 'Bargo’s Parts Store',
+    name: 'Foxglove’s Trade Post',
     art: '/town/shop.png',
     artW: 1376,
     artH: 768,
     ambience: 'Shelves glitter with parts, relics and questionable bargains.',
-    hotspots: [{ id: 'bargo', label: 'Bargo', x: 0.5, kind: 'npc', npcId: 'bargo' }],
+    hotspots: [{ id: 'trader', label: 'Foxglove', x: 0.5, kind: 'npc', npcId: 'trader' }],
     actions: [
       { id: 'shop', label: 'Browse Wares', icon: <ShoppingBag className="w-4 h-4" />, primary: true },
       { id: 'traveler', label: 'Travelers', icon: <Sparkles className="w-4 h-4" /> },
@@ -237,7 +292,7 @@ const SCENES: Record<SceneId, SceneDef> = {
     artW: 1376,
     artH: 768,
     ambience: 'Weights clank. Motivational posters defy gravity.',
-    hotspots: [{ id: 'vega', label: 'Coach Vega', x: 0.52, kind: 'npc', npcId: 'vega' }],
+    hotspots: [{ id: 'engineer', label: 'Basalt', x: 0.52, kind: 'npc', npcId: 'engineer' }],
     actions: [{ id: 'upgrades', label: 'Train & Upgrade', icon: <Zap className="w-4 h-4" />, primary: true }],
   },
   bank: {
@@ -247,7 +302,7 @@ const SCENES: Record<SceneId, SceneDef> = {
     artW: 1376,
     artH: 768,
     ambience: 'Marble counters, polite silence, extremely organized coins.',
-    hotspots: [{ id: 'quill', label: 'Mr. Quill', x: 0.5, kind: 'npc', npcId: 'quill' }],
+    hotspots: [],
     actions: [{ id: 'treasury', label: 'View Treasury', icon: <Sparkles className="w-4 h-4" />, primary: true }],
   },
   warehouse: {
@@ -257,7 +312,7 @@ const SCENES: Record<SceneId, SceneDef> = {
     artW: 1376,
     artH: 768,
     ambience: 'Crates stacked with geometric perfection.',
-    hotspots: [{ id: 'mira', label: 'Mira', x: 0.52, kind: 'npc', npcId: 'mira' }],
+    hotspots: [{ id: 'courier', label: 'Kite', x: 0.52, kind: 'npc', npcId: 'courier' }],
     actions: [{ id: 'vault', label: 'Open Supply Vault', icon: <Package className="w-4 h-4" />, primary: true }],
   },
   trophy: {
@@ -267,7 +322,7 @@ const SCENES: Record<SceneId, SceneDef> = {
     artW: 1376,
     artH: 768,
     ambience: 'Gold glimmers on velvet. Your deeds, framed.',
-    hotspots: [{ id: 'laurel', label: 'Doc Laurel', x: 0.5, kind: 'npc', npcId: 'laurel' }],
+    hotspots: [{ id: 'curator', label: 'Commander Indira', x: 0.5, kind: 'npc', npcId: 'curator' }],
     actions: [
       { id: 'medals', label: 'Medal Chest', icon: <Award className="w-4 h-4" />, primary: true },
       { id: 'badges', label: 'Badges', icon: <Trophy className="w-4 h-4" /> },
@@ -280,10 +335,28 @@ const SCENES: Record<SceneId, SceneDef> = {
     artW: 1376,
     artH: 768,
     ambience: 'Screens track growth, atmosphere and threats across your whole world.',
-    hotspots: [{ id: 'orion', label: 'Commander Orion', x: 0.55, kind: 'npc', npcId: 'orion' }],
+    hotspots: [{ id: 'mapkeeper', label: 'Archivist Vesper', x: 0.55, kind: 'npc', npcId: 'mapkeeper' }],
     actions: [
       { id: 'home', label: 'World Operations', icon: <Compass className="w-4 h-4" />, primary: true },
       { id: 'quests', label: 'Mission Log', icon: <Map className="w-4 h-4" /> },
+      { id: 'map', label: 'Sector Map', icon: <Map className="w-4 h-4" /> },
+    ],
+  },
+  tavern: {
+    id: 'tavern',
+    name: 'Starwell Tavern',
+    art: '/town/tavern.png',
+    artW: 1376,
+    artH: 768,
+    ambience: 'Constellation glasses clink. Someone is already arguing about perfect jumps.',
+    hotspots: [
+      { id: 'barkeeper', label: 'Marisol', x: 0.28, kind: 'npc', npcId: 'barkeeper' },
+      { id: 'challenger', label: 'Mothwing', x: 0.48, kind: 'npc', npcId: 'challenger' },
+      { id: 'storyteller', label: 'Old Cassian', x: 0.66, kind: 'npc', npcId: 'storyteller' },
+      { id: 'matchmaker', label: 'Puddle', x: 0.82, kind: 'npc', npcId: 'matchmaker' },
+    ],
+    actions: [
+      { id: 'arena', label: 'Create 2P Game', icon: <Swords className="w-4 h-4" />, primary: true },
     ],
   },
 };
@@ -422,10 +495,18 @@ export const LivingWorld: React.FC<LivingWorldProps> = ({ savedData, onAction, o
                 {hs.label}
               </span>
             )}
-            {hs.kind === 'npc' && (
-              <span className="px-2 py-0.5 rounded-full bg-[#070b14]/75 border border-white/15 text-[10px] text-slate-100">
-                {hs.label}
-              </span>
+            {hs.kind === 'npc' && hs.npcId && NPCS[hs.npcId] && (
+              <>
+                <img
+                  src={NPCS[hs.npcId].sprite || NPCS[hs.npcId].portrait}
+                  alt=""
+                  draggable={false}
+                  className="h-24 w-auto max-w-[7rem] object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.55)] pointer-events-none"
+                />
+                <span className="px-2 py-0.5 rounded-full bg-[#070b14]/75 border border-white/15 text-[10px] text-slate-100">
+                  {hs.label}
+                </span>
+              </>
             )}
           </button>
         ))}
@@ -522,13 +603,28 @@ export const LivingWorld: React.FC<LivingWorldProps> = ({ savedData, onAction, o
                 Close
               </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setTalk({ npcId: talk!.npcId, line: talk!.line + 1 })}
-              className="mt-2 w-full text-[11px] font-semibold py-1.5 rounded-xl bg-white/5 text-slate-200"
-            >
-              Continue
-            </button>
+            <div className="mt-2 flex gap-1.5">
+              <button
+                type="button"
+                onClick={() => setTalk({ npcId: talk!.npcId, line: talk!.line + 1 })}
+                className="flex-1 text-[11px] font-semibold py-1.5 rounded-xl bg-white/5 text-slate-200"
+              >
+                Continue
+              </button>
+              {npc.action && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    audioEngine.playClick();
+                    setTalk(null);
+                    onAction(npc.action!);
+                  }}
+                  className="flex-1 text-[11px] font-semibold py-1.5 rounded-xl bg-gradient-to-r from-sky-400 to-emerald-400 text-slate-950"
+                >
+                  {npc.actionLabel || 'Go'}
+                </button>
+              )}
+            </div>
           </div>
         )}
 
