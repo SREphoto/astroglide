@@ -487,7 +487,9 @@ export const LivingWorld: React.FC<LivingWorldProps> = ({ savedData, onAction, o
             className="absolute -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-auto"
             style={{
               left: hs.x * worldW,
-              top: hs.kind === 'npc' ? '58%' : '18%',
+              ...(hs.kind === 'npc'
+                ? { bottom: '6%', top: 'auto' }
+                : { top: '14%' }),
             }}
           >
             {hs.kind === 'door' && (
@@ -501,9 +503,9 @@ export const LivingWorld: React.FC<LivingWorldProps> = ({ savedData, onAction, o
                   src={NPCS[hs.npcId].sprite || NPCS[hs.npcId].portrait}
                   alt=""
                   draggable={false}
-                  className="h-24 w-auto max-w-[7rem] object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.55)] pointer-events-none"
+                  className="h-[min(52vh,420px)] w-auto max-w-[46vw] object-contain object-bottom drop-shadow-[0_12px_28px_rgba(0,0,0,0.65)] pointer-events-none select-none"
                 />
-                <span className="px-2 py-0.5 rounded-full bg-[#070b14]/75 border border-white/15 text-[10px] text-slate-100">
+                <span className="mt-1 px-2.5 py-1 rounded-full bg-[#070b14]/80 border border-cyan-300/25 text-[11px] font-semibold text-cyan-50 shadow-[0_0_18px_rgba(34,211,238,0.2)]">
                   {hs.label}
                 </span>
               </>
@@ -585,15 +587,15 @@ export const LivingWorld: React.FC<LivingWorldProps> = ({ savedData, onAction, o
 
       <div className="absolute bottom-3 inset-x-0 z-30 flex flex-col items-center gap-2 px-3 pointer-events-none">
         {npc && (
-          <div className="pointer-events-auto w-full max-w-md bg-[#070b14]/92 border border-white/12 rounded-2xl p-3 backdrop-blur-md shadow-2xl">
-            <div className="flex items-start gap-2.5">
-              <img src={npc.portrait} alt="" className="w-12 h-12 rounded-xl object-cover object-top border border-white/10" />
-              <div className="min-w-0 flex-1">
+          <div className="pointer-events-auto w-full max-w-lg bg-[#070b14]/88 border border-cyan-300/20 rounded-3xl p-3.5 backdrop-blur-md shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
+            <div className="flex items-end gap-3">
+              <img src={npc.portrait} alt="" className="h-28 w-20 object-contain object-bottom drop-shadow-lg shrink-0" />
+              <div className="min-w-0 flex-1 pb-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xs font-semibold">{npc.name}</span>
-                  <span className="text-[10px] uppercase tracking-wider text-slate-400">{npc.role}</span>
+                  <span className="text-sm font-semibold text-cyan-50">{npc.name}</span>
+                  <span className="text-[10px] uppercase tracking-wider text-amber-200/80">{npc.role}</span>
                 </div>
-                <p className="text-[12px] text-slate-200 mt-1 leading-relaxed">“{npc.lines[talk!.line % npc.lines.length]}”</p>
+                <p className="text-[13px] text-slate-100 mt-1.5 leading-relaxed">“{npc.lines[talk!.line % npc.lines.length]}”</p>
               </div>
               <button
                 type="button"
@@ -638,10 +640,10 @@ export const LivingWorld: React.FC<LivingWorldProps> = ({ savedData, onAction, o
                   audioEngine.playClick();
                   onAction(a.id);
                 }}
-                className={`px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 ${
+                className={`px-3.5 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1.5 border ${
                   a.primary
-                    ? 'bg-gradient-to-r from-sky-400 to-emerald-400 text-slate-950 shadow-lg'
-                    : 'bg-[#070b14]/85 border border-white/15 text-slate-100 backdrop-blur-md'
+                    ? 'bg-gradient-to-r from-sky-400/95 to-emerald-400/95 text-slate-950 border-white/10 shadow-[0_0_24px_rgba(56,189,248,0.35)]'
+                    : 'bg-[#070b14]/70 border-amber-300/25 text-amber-50 backdrop-blur-md'
                 }`}
               >
                 {a.icon}
@@ -652,7 +654,7 @@ export const LivingWorld: React.FC<LivingWorldProps> = ({ savedData, onAction, o
         )}
 
         <p className="text-[10px] italic text-slate-400/90 text-center max-w-[90%] truncate pointer-events-none">
-          {hint || scene.ambience} · drag to look around
+          {hint || scene.ambience} · drag to explore
         </p>
       </div>
     </div>

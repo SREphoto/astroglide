@@ -482,7 +482,7 @@ export default function App() {
     <div className="relative w-full h-screen bg-slate-950 flex justify-center items-center overflow-hidden font-sans select-none">
       <ToastContainer />
       {/* Game Canvas Container */}
-      <div className="relative w-full max-w-[600px] h-full bg-slate-900 shadow-2xl overflow-hidden flex flex-col justify-center items-center">
+      <div className={`relative w-full max-w-[600px] h-full bg-slate-900 shadow-2xl overflow-hidden flex flex-col justify-center items-center${gameMode === 'MENU' && activeModal ? ' hub-station-open' : ''}`}>
         <canvas
           ref={canvasRef}
           className="w-full h-full block touch-none cursor-pointer"
