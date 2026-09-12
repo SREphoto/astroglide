@@ -27,3 +27,25 @@
     cursor: pointer;
   }
 }
+
+
+/* Hub immersion: systems open as in-town stations over LivingWorld, not opaque old menus */
+.hub-station-open .fixed.inset-0.z-50,
+.hub-station-open .absolute.inset-0.z-30 {
+  background-color: rgba(7, 11, 20, 0.28) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+.hub-station-open .fixed.inset-0.z-50 > div,
+.hub-station-open .absolute.inset-0.z-30 > div {
+  max-height: min(62vh, 640px) !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  border-radius: 1.35rem 1.35rem 0 0 !important;
+  border-bottom: none !important;
+  margin: 0 !important;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.45) !important;
+}
